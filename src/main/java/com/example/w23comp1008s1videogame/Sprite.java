@@ -4,7 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Sprite {
-    private int posX, posY, imageWidth, imageHeight, speed;
+    protected int posX, posY, imageWidth, imageHeight, speed;
     private Image image;
     private boolean alive;
 
@@ -75,14 +75,6 @@ public class Sprite {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
-    }
-
-    public void moveRight()
-    {
-        posX += speed;
-
-        if (posX>1000)
-            posX=0;
     }
 
     public void draw(GraphicsContext gc)
