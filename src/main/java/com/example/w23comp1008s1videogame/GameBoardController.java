@@ -40,6 +40,7 @@ public class GameBoardController {
 
         //Create a Sprite that we can draw on our canvas
         Ship ship = new Ship(300,500);
+        Alien alien = new Alien(900,400);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -47,6 +48,7 @@ public class GameBoardController {
                 gc.drawImage(background,0,0,canvas.getWidth(),canvas.getHeight());
                 userMovesShip(ship);
                 ship.draw(gc);
+                alien.draw(gc);
             }
         };
         timer.start();
