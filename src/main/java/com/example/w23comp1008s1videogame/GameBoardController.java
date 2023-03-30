@@ -63,5 +63,7 @@ public class GameBoardController {
             ship.moveLeft();
         if (activeKeys.contains(KeyCode.RIGHT))
             ship.moveRight();
+        if (activeKeys.contains(KeyCode.SPACE))
+            ship.shootMissile();
     }
 }
