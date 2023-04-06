@@ -47,8 +47,10 @@ public class GameBoardController {
         //Random Number Generator (rng)
         SecureRandom rng = new SecureRandom();
 
-        for (int i=1; i<=25; i++)
+        for (int i=1; i<=5; i++)
             aliens.add(new Alien(rng.nextInt(700,1000), rng.nextInt(0,750)));
+
+        ArrayList<Explosion> explosions = new ArrayList<>();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -59,16 +61,31 @@ public class GameBoardController {
 
                 aliens.removeIf(alien -> !alien.isAlive());
 
+              //add code so that it will create an explosion whereever there is a collision
+                //add the new Explosion object to the ArrayList called explosions
+
+                //draw each of the explosions
+                for(Explosion explosion : explosions)
+                    explosion.draw(gc);
+
                 for(Alien alien : aliens)
                 {
                     alien.draw(gc);
+
+                    if (alien.collidesWith(ship))
+                    {
+                        explosions.add(new Explosion(ship.getPosX(), ship.getPosY()));
+                        ship.setAlive(false);
+                        alien.setAlive(false);
+                        stop();
+                    }
 
                     //did any of the missiles hit the alien?
                     for (Missile missile : ship.getMissilesReleased())
                     {
                         if (missile.collidesWith(alien))
                         {
-                            //add an explosion
+                            explosions.add(new Explosion(alien.getPosX(), alien.getPosY()));
                             missile.setAlive(false);
                             alien.setAlive(false);
                         }
