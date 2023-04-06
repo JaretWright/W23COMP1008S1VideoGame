@@ -60,7 +60,12 @@ public class GameBoardController {
             public void handle(long now) {
                 gc.drawImage(background,0,0,canvas.getWidth(),canvas.getHeight());
                 userMovesShip(ship);
-                ship.draw(gc);
+
+
+                if (ship.isAlive())
+                    ship.draw(gc);
+                else if (explosions.size()==0  && ship.getMissilesReleased().size()==0)
+                    stop();
 
                 aliens.removeIf(alien -> !alien.isAlive());
                 explosions.removeIf(explosion -> !explosion.isAlive());
@@ -71,7 +76,8 @@ public class GameBoardController {
                 {
                     //user has destroyed all the aliens, send a message and stop the game
                     finalMessage(gc, "You saved the universe");
-                    stop();
+                    if (explosions.size()==0  && ship.getMissilesReleased().size()==0)
+                        stop();
                 }
 
                 //draw each of the explosions
@@ -82,13 +88,13 @@ public class GameBoardController {
                 {
                     alien.draw(gc);
 
-                    if (alien.collidesWith(ship))
+                    if (alien.collidesWith(ship) && ship.isAlive())
                     {
                         explosions.add(new Explosion(ship.getPosX(), ship.getPosY()));
                         ship.setAlive(false);
                         alien.setAlive(false);
                         finalMessage(gc, "The Aliens got you - nice try!");
-                        stop();
+
 //                        startButton.setVisible(true);
 //                        anchorPane.getChildren().remove(canvas);
                     }
