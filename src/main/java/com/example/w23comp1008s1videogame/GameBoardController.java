@@ -9,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -60,9 +63,16 @@ public class GameBoardController {
                 ship.draw(gc);
 
                 aliens.removeIf(alien -> !alien.isAlive());
+                explosions.removeIf(explosion -> !explosion.isAlive());
 
-              //add code so that it will create an explosion whereever there is a collision
-                //add the new Explosion object to the ArrayList called explosions
+                //your goal is to add logic such that any existing explosions can finish before the animation stops
+
+                if (aliens.size()==0)
+                {
+                    //user has destroyed all the aliens, send a message and stop the game
+                    finalMessage(gc, "You saved the universe");
+                    stop();
+                }
 
                 //draw each of the explosions
                 for(Explosion explosion : explosions)
@@ -77,7 +87,10 @@ public class GameBoardController {
                         explosions.add(new Explosion(ship.getPosX(), ship.getPosY()));
                         ship.setAlive(false);
                         alien.setAlive(false);
+                        finalMessage(gc, "The Aliens got you - nice try!");
                         stop();
+//                        startButton.setVisible(true);
+//                        anchorPane.getChildren().remove(canvas);
                     }
 
                     //did any of the missiles hit the alien?
@@ -95,6 +108,14 @@ public class GameBoardController {
         };
         timer.start();
         anchorPane.getChildren().add(canvas);
+    }
+
+    private void finalMessage(GraphicsContext gc, String message)
+    {
+        Font font = Font.font("Arial", FontWeight.NORMAL,32);
+        gc.setFont(font);
+        gc.setFill(Color.WHITE);
+        gc.fillText(message, 250,350);
     }
 
     private void userMovesShip(Ship ship)
